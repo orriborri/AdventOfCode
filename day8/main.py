@@ -1,3 +1,5 @@
+import copy
+
 
 def readfile():
     with open("input.txt", "r") as f:
@@ -17,7 +19,7 @@ def resetArray():
         cmd[i][2] = 0
 
 
-def checkProgram():
+def checkProgram(cmd):
     acc = 0
     i = 0
     succsess = False
@@ -41,23 +43,21 @@ def checkProgram():
     return(acc, succsess)
 
 
-print(checkProgram()[0])
+deepCmd = copy.deepcopy(cmd)
+print(checkProgram(deepCmd)[0])
 acc = 0
+
 for i, derp in enumerate(cmd):
-    resetArray()
+    deep = copy.deepcopy(cmd)
     if(cmd[i][0] == 'nop'):
-        cmd[i][0] = 'jmp'
-        acc, succ = checkProgram()
-        if(succ):
-            break
-        else:
-            cmd[i][0] = 'nop'
+        deep[i][0] = 'jmp'
     elif(cmd[i][0] == 'jmp'):
-        cmd[i][0] = 'nop'
-        acc, succ = checkProgram()
-        if(succ):
-            break
-        else:
-            cmd[i][0] = 'jmp'
+        deep[i][0] = 'nop'
+    else:
+        continue
+    acc, succ = checkProgram(deep)
+    if(succ):
+        break
+
 
 print(acc)
